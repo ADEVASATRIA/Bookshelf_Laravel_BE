@@ -62,4 +62,29 @@ class AuthController extends Controller
             'users' => $users
         ], 200);
     }
+
+    public function getUsersByEmail($email){
+        // Validasi alamat email
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return response()->json([
+                'error' => 'Invalid email format',
+            ], 400);
+        }
+
+        // Cari pengguna berdasarkan alamat email
+        $user = User::where('email', $email)->first();
+
+        // Periksa apakah pengguna ditemukan
+        if (!$user) {
+            return response()->json([
+                'error' => 'User not found',
+            ], 404);
+        }
+
+        // Kembalikan pengguna yang ditemukan dalam respons JSON
+        return response()->json([
+            'user' => $user,
+            'Noted' => "Successfully show user specified by email",
+        ], 200);
+    }
 }
